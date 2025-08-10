@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday, Krishna!</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif; /* A fun, birthday-appropriate font */
+            background: linear-gradient(to right, #ff7e5f, #feb47b); /* Warm, celebratory gradient */
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            text-align: center;
+            overflow: hidden; /* Hide overflow for animations */
+            position: relative;
+        }
+
+        .container {
+            background-color: rgba(0, 0, 0, 0.4); /* Slightly transparent background */
+            padding: 30px 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            max-width: 90%;
+            animation: fadeIn 2s ease-out; /* Fade-in effect */
+        }
+
+        h1 {
+            font-size: 3.5em; /* Large heading */
+            color: #ffd700; /* Gold color */
+            margin-bottom: 15px;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
+        }
+
+        p {
+            font-size: 1.4em;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .gift-image {
+            max-width: 80%;
+            height: auto;
+            border-radius: 10px;
+            margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .cta-button {
+            display: inline-block;
+            background-color: #4CAF50; /* Green button */
+            color: white;
+            padding: 15px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 1.2em;
+            margin-top: 20px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .cta-button:hover {
+            background-color: #45a049;
+            transform: translateY(-3px);
+        }
+
+        /* Confetti animation */
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #f0f; /* Pink */
+            opacity: 0;
+            animation: fall 5s linear infinite;
+            pointer-events: none; /* Allows clicks to pass through */
+            border-radius: 50%; /* Make them round */
+        }
+
+        .confetti:nth-child(2n) { background-color: #0ff; animation-delay: 1s; } /* Cyan */
+        .confetti:nth-child(3n) { background-color: #ff0; animation-delay: 2s; } /* Yellow */
+        .confetti:nth-child(4n) { background-color: #0f0; animation-delay: 3s; } /* Green */
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(120vh) rotate(720deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="confetti" style="left: 10%;"></div>
+    <div class="confetti" style="left: 25%; animation-delay: 0.5s;"></div>
+    <div class="confetti" style="left: 40%; background-color: #f00;"></div>
+    <div class="confetti" style="left: 55%; animation-delay: 1.5s; background-color: #00f;"></div>
+    <div class="confetti" style="left: 70%; animation-delay: 2.5s;"></div>
+    <div class="confetti" style="left: 85%; background-color: #ff8c00;"></div>
+
+    <div class="container">
+        <h1>🎉 Happy Birthday, Krishna! 🥳</h1>
+        <p>Dearest Krishna,</p>
+        <p>Here's a little digital surprise just for you! We hope this special day is filled with joy, laughter, and everything you wish for.</p>
+        <p>Press the button below to reveal your true gift!</p>
+        <a href="gift_reveal.html" class="cta-button">🌟 Reveal Your Gift! 🌟</a>
+        <p style="font-size: 0.9em; margin-top: 30px;">With all our love,</p>
+        <p style="font-size: 1.1em; font-weight: bold;">[Krishna]</p>
+    </div>
+</body>
+</html>

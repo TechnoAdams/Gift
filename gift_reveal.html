@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Japa Counter</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Playfair+Display:wght@700&display=swap');
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(to bottom right, #1f2937, #111827, #000000); /* Dark, spiritual gradient */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: #d1d5db; /* Light gray text */
+        }
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background: rgba(31, 41, 55, 0.9);
+            backdrop-filter: blur(5px);
+            border-radius: 2rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            border: 1px solid rgba(156, 163, 175, 0.2); /* Subtle light border */
+        }
+        .japa-mantra {
+            font-family: 'Playfair Display', serif;
+            letter-spacing: 0.1em;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+        .japa-button-style {
+            background: #f59e0b; /* Amber/Gold color */
+            color: #1f2937;
+        }
+        .japa-button-style:hover {
+            background: #d97706; /* Darker amber */
+        }
+        .counter-card {
+            background: rgba(55, 65, 81, 0.7);
+            border: 1px solid rgba(107, 114, 128, 0.3);
+        }
+        
+        /* Message box styling */
+        .message-box {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 2rem;
+            background-color: rgba(31, 41, 55, 0.95);
+            color: #fcd34d;
+            border-radius: 1rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            border: 1px solid #fcd34d;
+            max-width: 80vw;
+            text-align: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            z-index: 50;
+        }
+        .message-box.show {
+            opacity: 1;
+            visibility: visible;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <div class="container text-center">
+
+        <div class="p-6 md:p-12">
+            <!-- Header Section -->
+            <div class="mb-8">
+                <h1 class="japa-mantra text-4xl md:text-5xl font-bold mb-4 text-amber-300">
+                    Hare Krishna Hare Krishna<br>
+                    Krishna Krishna Hare Hare<br>
+                    Hare Rama Hare Rama<br>
+                    Rama Rama Hare Hare
+                </h1>
+                <p class="text-xl md:text-2xl font-light text-gray-400">
+                    "Chant and be happy"
+                </p>
+            </div>
+
+            <!-- Counter Display Section -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+                <!-- Japa Count -->
+                <div class="counter-card p-6 rounded-xl shadow-lg border-b-4 border-amber-400">
+                    <p class="text-lg text-amber-300 uppercase font-semibold tracking-wide">Japa Count</p>
+                    <div id="japa-count" class="text-6xl md:text-7xl font-extrabold text-amber-500 mt-2">0</div>
+                </div>
+
+                <!-- Rounds Count -->
+                <div class="counter-card p-6 rounded-xl shadow-lg border-b-4 border-amber-400">
+                    <p class="text-lg text-amber-300 uppercase font-semibold tracking-wide">Rounds (108 beads)</p>
+                    <div id="rounds-count" class="text-6xl md:text-7xl font-extrabold text-amber-500 mt-2">0</div>
+                </div>
+                
+                <!-- Malas Count -->
+                <div class="counter-card p-6 rounded-xl shadow-lg border-b-4 border-amber-400">
+                    <p class="text-lg text-amber-300 uppercase font-semibold tracking-wide">Malas (16 rounds)</p>
+                    <div id="malas-count" class="text-6xl md:text-7xl font-extrabold text-amber-500 mt-2">0</div>
+                </div>
+            </div>
+
+            <!-- Main Click Button -->
+            <div class="mb-8">
+                <button id="japa-button" class="w-full md:w-auto p-8 japa-button-style font-bold text-3xl rounded-full shadow-2xl transition duration-300 transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-4 focus:ring-amber-300">
+                    Chant Hare Krishna
+                </button>
+            </div>
+
+            <!-- Reset Button -->
+            <div>
+                <button id="reset-button" class="bg-gray-400 hover:bg-gray-500 text-gray-900 font-bold py-3 px-6 rounded-full shadow transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-gray-300">
+                    Reset All Counters
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Message Box for the mantra -->
+    <div id="message-box" class="message-box">
+        <p class="text-2xl md:text-3xl font-playfair-display font-bold mb-4">
+            Jaya Śrī Kṛṣṇa Caitanya<br>
+            Prabhu Nityānanda<br>
+            Śrī Advaita Gadādhara<br>
+            Śrīvāsādi Gaura-bhakta-vṛnda
+        </p>
+        <button id="close-message" class="mt-4 py-2 px-6 bg-amber-500 hover:bg-amber-600 text-gray-900 font-bold rounded-full transition-colors duration-200">
+            Okay
+        </button>
+    </div>
+
+    <script>
+        // Get references to the HTML elements
+        const japaButton = document.getElementById('japa-button');
+        const resetButton = document.getElementById('reset-button');
+        const japaCountEl = document.getElementById('japa-count');
+        const roundsCountEl = document.getElementById('rounds-count');
+        const malasCountEl = document.getElementById('malas-count');
+        const messageBox = document.getElementById('message-box');
+        const closeMessageButton = document.getElementById('close-message');
+
+        // Initialize the counter variables
+        let japaCount = 0;
+        let roundsCount = 0;
+        let malasCount = 0;
+        let isMantraRound = true; // State to track if it's time for the mantra message
+
+        // Constants for the japa sequence
+        const BEADS_PER_ROUND = 108;
+        const ROUNDS_PER_MALA = 16;
+        
+        // Fix: Create a single AudioContext instance to be reused
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        
+        // This function plays a simple click sound using the Web Audio API
+        function playClickSound() {
+            // Check if the AudioContext is in a suspended state (e.g., waiting for user interaction)
+            if (audioContext.state === 'suspended') {
+                audioContext.resume();
+            }
+
+            // Create a new oscillator and gain node for each sound
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+
+            oscillator.type = 'sine'; // Can be 'sine', 'square', 'sawtooth', 'triangle'
+            oscillator.frequency.setValueAtTime(440, audioContext.currentTime); // A4 note
+            gainNode.gain.setValueAtTime(0.5, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.5);
+
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+
+            oscillator.start();
+            oscillator.stop(audioContext.currentTime + 0.5);
+        }
+
+        // Function to show the message box
+        function showMantraMessage() {
+            messageBox.classList.add('show');
+            playClickSound(); // Optional: play a different sound for the message
+        }
+
+        // Function to hide the message box
+        function hideMantraMessage() {
+            messageBox.classList.remove('show');
+        }
+
+        // Function to update the counters on the screen
+        function updateDisplay() {
+            japaCountEl.textContent = japaCount;
+            roundsCountEl.textContent = roundsCount;
+            malasCountEl.textContent = malasCount;
+        }
+
+        // Event listener for the main chant button
+        japaButton.addEventListener('click', () => {
+            if (isMantraRound) {
+                // If it's a mantra round, show the message box and don't increment
+                showMantraMessage();
+                // We'll set isMantraRound to false when the user closes the message box
+            } else {
+                // Otherwise, increment the japa count
+                japaCount++;
+
+                // Check if a new round is completed
+                if (japaCount % BEADS_PER_ROUND === 0) {
+                    roundsCount++;
+                    // Set the state for the mantra round
+                    isMantraRound = true;
+                    // Check if a new mala is completed
+                    if (roundsCount % ROUNDS_PER_MALA === 0) {
+                        malasCount++;
+                    }
+                }
+                
+                // Update the display and play sound
+                updateDisplay();
+                playClickSound();
+            }
+        });
+
+        // Event listener for the close button on the message box
+        closeMessageButton.addEventListener('click', () => {
+            hideMantraMessage();
+            isMantraRound = false; // Allow the counting to begin after the message is closed
+        });
+
+
+        // Event listener for the reset button
+        resetButton.addEventListener('click', () => {
+            japaCount = 0;
+            roundsCount = 0;
+            malasCount = 0;
+            isMantraRound = true; // Reset the state to show the message on the first click
+            updateDisplay(); // Reset the display
+        });
+
+        // Initial display update when the page loads
+        document.addEventListener('DOMContentLoaded', updateDisplay);
+
+    </script>
+</body>
+</html>
+
+
